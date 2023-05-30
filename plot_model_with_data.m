@@ -1,6 +1,6 @@
 function [] = plot_model_with_data(k, y_mod_train_arx, ...
     y_mod_train_oe, y_traininig_used, y_mod_valid_arx, ...
-    y_mod_valid_oe , y_validation_used)
+    y_mod_valid_oe , y_validation_used, number_order)
 
 
     % liczenie błędów
@@ -20,7 +20,7 @@ function [] = plot_model_with_data(k, y_mod_train_arx, ...
     legend('Dane uczące', 'Model', 'Location', 'best')
     xlabel('Numer próbki, k' )
     ylabel('Sygnał wyjścwiowy, y')
-    title(sprintf('Dynamiczny model liniowy 1. rzędu bez rekurencji, błąd = %.7f', rmse_arx_train))
+    title(sprintf('Dynamiczny model liniowy %d. rzędu bez rekurencji, błąd = %.7f', number_order, rmse_arx_train))
     
     % wykres z rekurencją
     subplot(2,1,2);
@@ -28,7 +28,7 @@ function [] = plot_model_with_data(k, y_mod_train_arx, ...
     legend('Dane uczące', 'Model', 'Location', 'best')
     xlabel('Numer próbki, k' )
     ylabel('Sygnał wyjścwiowy, y')
-    title(sprintf('Dynamiczny model liniowy 1. rzędu z rekurencją, błąd = %.7f', rmse_oe_train))
+    title(sprintf('Dynamiczny model liniowy %d. rzędu z rekurencją, błąd = %.7f', number_order, rmse_oe_train))
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % dane weryfikujące
@@ -41,7 +41,7 @@ function [] = plot_model_with_data(k, y_mod_train_arx, ...
     legend('Dane weryfikujące', 'Model', 'Location', 'best')
     xlabel('Numer próbki, k' )
     ylabel('Sygnał wyjścwiowy, y')
-    title(sprintf('Dynamiczny model liniowy 1. rzędu bez rekurencji, błąd = %.7f', rmse_arx_valid))
+    title(sprintf('Dynamiczny model liniowy %d. rzędu bez rekurencji, błąd = %.7f', number_order, rmse_arx_valid))
     
     % wykres z rekurencją
     subplot(2,1,2);
@@ -49,6 +49,6 @@ function [] = plot_model_with_data(k, y_mod_train_arx, ...
     legend('Dane weryfikujące', 'Model', 'Location', 'best')
     xlabel('Numer próbki, k' )
     ylabel('Sygnał wyjścwiowy, y')
-    title(sprintf('Dynamiczny model liniowy 1. rzędu z rekurencją, błąd = %.7f', rmse_oe_valid))
+    title(sprintf('Dynamiczny model liniowy %d. rzędu z rekurencją, błąd = %.7f', number_order, rmse_oe_valid))
 
 end
