@@ -14,7 +14,6 @@ function [] = plot_model_with_data(k, y_mod_train_arx, ...
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     figure;
-
     % wykres bez rekurencji
     subplot(2,1,1);
     plot(k, y_traininig_used, 'b-', k, y_mod_train_arx, 'r-');
@@ -36,7 +35,6 @@ function [] = plot_model_with_data(k, y_mod_train_arx, ...
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     figure;
-    
     % wykres bez rekurencji
     subplot(2,1,1);
     plot(k, y_validation_used, 'b-', k, y_mod_valid_arx, 'r-');
