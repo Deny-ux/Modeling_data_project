@@ -12,105 +12,46 @@ y_training = y(1:2:length(y));
 
 u_validation = u(2:2:length(u));
 y_validation = y(2:2:length(y));
-% u = linspace(-1, 1, 100);
 
+%% N1
 
-%% N = 2
+M = horzcat(ones(length(u_training), 1), u_training);
+w1 = M\y_training;
+f1 = @(u) w1(1) + w1(2)*u;
+plot_static_model(f1, u_training, y_training, u_validation, y_validation, 1)
+%% N2
 
-% Dane uczące
-M2 = horzcat(u_training.^2, u_training, ones(length(u_training), 1));
-W2 = M2\y_training;
-functionString2 = ['@(x) ', num2str(W2(3)), ' + ', num2str(W2(2)), '*x', ' + ', num2str(W2(1)), '*x^2'];
+M = horzcat(ones(length(u_training), 1), u_training, u_training.^2);
+w2 = M\y_training;
+f2 = @(u) w2(1) + w2(2)*u + w2(3)*u^2;
+plot_static_model(f2, u_training, y_training, u_validation, y_validation, 2)
 
-f2 = str2func(functionString2);
+%% N3
 
-figure;
-plot_model_with_data(f2, u_training, y_training, ...
-    'Statyczny model nieliniowy na tle danych uczących, N = 2', ...
-    'Model', 'Dane uczące')
+M = horzcat(ones(length(u_training), 1), u_training, u_training.^2, u_training.^3);
+w3 = M\y_training;
+f3 = @(u) w3(1) + w3(2)*u + w3(3)*u^2 + w3(4)*u^3;
+plot_static_model(f3, u_training, y_training, u_validation, y_validation, 3)
 
-rmse_n2_ucz = find_MSE(y_training, polyval(W2, u_training))
+%% N4
 
-% Dane weryfikujące
-figure;
-plot_model_with_data(f2, u_validation, y_validation, ...
-    'Statyczny model nieliniowy na tle danych weryfikujących, N = 2', ...
-    'Model', 'Dane weryfikujące')
+M = horzcat(ones(length(u_training), 1), u_training, u_training.^2, u_training.^3, u_training.^4);
+w4 = M\y_training;
+f4 = @(u) w4(1) + w4(2)*u + w4(3)*u^2 + w4(4)*u^3 + w4(5)*u^4;
+plot_static_model(f4, u_training, y_training, u_validation, y_validation, 4)
 
-rmse_n2_weryf = find_MSE(y_validation, polyval(W2, u_validation))
+%% N5
 
+M = horzcat(ones(length(u_training), 1), u_training, u_training.^2, u_training.^3, u_training.^4, u_training.^5);
+w5 = M\y_training;
+f5 = @(u) w5(1) + w5(2)*u + w5(3)*u^2 + w5(4)*u^3 + w5(5)*u^4 + w5(6)*u^5;
+plot_static_model(f5, u_training, y_training, u_validation, y_validation, 5)
 
+%% N6
 
-%% N = 3
+M = horzcat(ones(length(u_training), 1), u_training, u_training.^2, u_training.^3, u_training.^4, u_training.^5, u_training.^6);
+w6 = M\y_training;
+f6 = @(u) w6(1) + w6(2)*u + w6(3)*u^2 + w6(4)*u^3 + w6(5)*u^4 + w6(6)*u^5 + w6(7)*u^6;
+plot_static_model(f6, u_training, y_training, u_validation, y_validation, 6)
 
-% Dane uczące
-M3 = horzcat(u_training.^3, u_training.^2, u_training, ones(length(u_training), 1));
-W3 = M3\y_training;
-functionString3 = ['@(x) ', num2str(W3(4)), ' + ', num2str(W3(3)), '*x', ' + ', num2str(W3(2)), '*x^2', ' + ', num2str(W3(1)), '*x^3'];
-
-f3 = str2func(functionString3);
-
-% polyFunc3 = polyval(W3, u);
-figure;
-plot_model_with_data(f3, u_training, y_training, ...
-    'Statyczny model nieliniowy na tle danych uczących, N = 3', ...
-    'Model', 'Dane uczące')
-
-rmse_n3_ucz = find_MSE(y_training, polyval(W3, u_training))
-
-% Dane weryfikujące
-figure;
-plot_model_with_data(f3, u_validation, y_validation, ...
-    'Statyczny model nieliniowy na tle danych weryfikujących, N = 3', ...
-    'Model', 'Dane weryfikujące')
-
-rmse_n3_weryf = find_MSE(y_validation, polyval(W3, u_validation))
-
-
-
-%% N = 4
-
-% Dane uczące
-M4 = horzcat(u_training.^4, u_training.^3, u_training.^2, u_training, ones(length(u_training), 1));
-W4 = M4\y_training;
-
-functionString4 = ['@(x) ', num2str(W4(5)), ' + ', num2str(W4(4)), '*x', ' + ', num2str(W4(3)), '*x^2', ' + ', num2str(W4(2)), '*x^3', ' + ', num2str(W4(1)), '*x^4'];
-f4 = str2func(functionString4);
-
-figure;
-plot_model_with_data(f4, u_training, y_training, ...
-    'Statyczny model nieliniowy na tle danych uczących, N = 4', ...
-    'Model', 'Dane uczące')
-
-rmse_n4_ucz = find_MSE(y_training, polyval(W4, u_training))
-
-% Dane weryfikujące
-figure;
-plot_model_with_data(f4, u_validation, y_validation, ...
-    'Statyczny model nieliniowy na tle danych weryfikujących, N = 4', ...
-    'Model', 'Dane weryfikujące')
-
-rmse_n4_weryf = find_MSE(y_validation, polyval(W4, u_validation))
-
-%% N = 5
-
-% Dane uczące
-M5 = horzcat(u_training.^5, u_training.^4, u_training.^3, u_training.^2, u_training, ones(length(u_training), 1));
-W5 = M5\y_training;
-functionString5 = ['@(x) ', num2str(W5(6)), ' + ', num2str(W5(5)), '*x', ' + ', num2str(W5(4)), '*x^2', ' + ', num2str(W5(3)), '*x^3', ' + ', num2str(W5(2)), '*x^4', ' + ', num2str(W5(1)), '*x^5'];
-f5 = str2func(functionString5);
-figure;
-plot_model_with_data(f5, u_training, y_training, ...
-    'Statyczny model nieliniowy na tle danych uczących, N = 5', ...
-    'Model', 'Dane uczące')
-
-rmse_n5_ucz = find_MSE(y_training, polyval(W5, u_training))
-
-% Dane weryfikujące
-figure;
-plot_model_with_data(f5, u_validation, y_validation, ...
-    'Statyczny model nieliniowy na tle danych weryfikujących, N = 5', ...
-    'Model', 'Dane weryfikujące')
-
-rmse_n5_weryf = find_MSE(y_validation, polyval(W5, u_validation))
 

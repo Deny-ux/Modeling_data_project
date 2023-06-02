@@ -13,7 +13,35 @@ y_validation = dynamic_data_validation(:, 2);
 k_start = 10;
 k_used = k(1, k_start:end)';
 length_k = length(k) - k_start + 1;
+% % % % % % % % % % % % % % % % % % 
 
+Y_tr = y_training(k_start:end, 1);
+Y_valid = y_training(k_start:end, 1);
+
+% M1 = horzcat(u_training(k_start-1:end-1,1), y_training(k_start-1:end-1,1));
+% 
+% w1 = M1\Y_tr;
+% y_mod_tr = zeros(2000-k_start+1, 1);
+% for i=1:2000-k_start+1
+%     y_mod_tr(i)= w1(1)*u_training(k_start - 2 + i) + w1(2)*y_training(k_start - 2 + i);
+% end
+% 
+% plot_model_with_data(k_used, y_mod_tr,y_mod_tr,Y_tr, y_mod_tr,y_mod_tr,Y_tr, 1)
+% 
+% 
+% %n2
+% 
+% M2 = horzcat(u_training(k_start-1:end-1,1), u_training(k_start-2:end-2,1), y_training(k_start-1:end-1,1),y_training(k_start-2:end-2,1));
+% 
+% w2 = M2\Y_tr;
+% y_mod_tr_n2 = zeros(2000-k_start+1, 1);
+% for i=1:2000-k_start+1
+%     y_mod_tr_n2(i)= w2(1)*u_training(k_start - 2 + i) + w2(2)*u_training(k_start - 3 + i) + w2(3)*y_training(k_start - 2 + i) + w2(4)*y_training(k_start - 3 + i);
+% end
+% 
+% plot_model_with_data(k_used, y_mod_tr_n2,y_mod_tr,Y_tr, y_mod_tr,y_mod_tr,Y_tr, 2)
+
+% % % % % % % % % % % % % % % % % % % 
 
 %% Pierwszy rząd
 
@@ -27,14 +55,14 @@ w_n1 = M_n1_arx\y_training(k_start:end);
 % bez rekurencji
 y_mod_n1_arx_train = zeros(length_k, 1);
 for i = 1:length_k
-    y_mod_n1_arx_train(i) = w_n1(1)*u_training(k_start-1+i) + w_n1(2)*y_training(k_start-1+i);
+    y_mod_n1_arx_train(i) = w_n1(1)*u_training(k_start-2+i) + w_n1(2)*y_training(k_start-2+i);
 end
 
 % z rekurencją
 y_mod_n1_oe_train = zeros(length_k, 1);
 y_mod_n1_oe_train(1) = y_mod_n1_arx_train(1);
 for i = 2:length_k
-    y_mod_n1_oe_train(i) = w_n1(1)*u_training(k_start-1+i) + w_n1(2)*y_mod_n1_oe_train(i - 1);
+    y_mod_n1_oe_train(i) = w_n1(1)*u_training(k_start-2+i) + w_n1(2)*y_mod_n1_oe_train(i - 1);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -44,7 +72,7 @@ end
 y_mod_n1_arx_valid = zeros(length_k, 1);
 
 for i = 1:length_k
-    y_mod_n1_arx_valid(i) = w_n1(1)*u_validation(k_start -1 + i) + w_n1(2)*y_validation(k_start -1 + i);
+    y_mod_n1_arx_valid(i) = w_n1(1)*u_validation(k_start -2 + i) + w_n1(2)*y_validation(k_start -2 + i);
 end
 
 
@@ -52,7 +80,7 @@ end
 y_mod_n1_oe_valid = zeros(length_k, 1);
 y_mod_n1_oe_valid(1) = y_mod_n1_arx_valid(1);
 for i = 2:length_k
-    y_mod_n1_oe_valid(i) = w_n1(1)*u_validation(k_start + i-1) + w_n1(2)*y_mod_n1_oe_valid(i-1);
+    y_mod_n1_oe_valid(i) = w_n1(1)*u_validation(k_start + i-2) + w_n1(2)*y_mod_n1_oe_valid(i-1);
 end
 
 plot_model_with_data(k_used, y_mod_n1_arx_train, y_mod_n1_oe_train,  ...
@@ -74,8 +102,8 @@ w_n2 = M_n2\y_training(k_start:end);
 % bez rekurencji
 y_mod_n2_arx_train = zeros(length_k, 1);
 for i = 1:length_k
-    y_mod_n2_arx_train(i) = w_n2(1)*u_training(k_start-1+i) + w_n2(2)*u_training(k_start-2+i) ...
-        + w_n2(3)*y_training(k_start-1+i) + w_n2(4)*y_training(k_start-2+i);
+    y_mod_n2_arx_train(i) = w_n2(1)*u_training(k_start-2+i) + w_n2(2)*u_training(k_start-3+i) ...
+        + w_n2(3)*y_training(k_start-2+i) + w_n2(4)*y_training(k_start-3+i);
 end
 
 % z rekurencją
@@ -83,7 +111,7 @@ y_mod_n2_oe_train = zeros(length_k, 1);
 y_mod_n2_oe_train(1) = y_mod_n2_arx_train(1);
 y_mod_n2_oe_train(2) = y_mod_n2_arx_train(2);
 for i = 3:length_k
-    y_mod_n2_oe_train(i) = w_n2(1)*u_training(k_start-1+i) + w_n2(2)*u_training(k_start-2+i) ...
+    y_mod_n2_oe_train(i) = w_n2(1)*u_training(k_start-2+i) + w_n2(2)*u_training(k_start-3+i) ...
         + w_n2(3)*y_mod_n2_oe_train(i - 1) + w_n2(4)*y_mod_n2_oe_train(i - 2);
 end
 
@@ -95,8 +123,8 @@ end
 y_mod_n2_arx_valid = zeros(length_k, 1);
 
 for i = 1:length_k
-    y_mod_n2_arx_valid(i) = w_n2(1)*u_validation(k_start-1+i) + w_n2(2)*u_validation(k_start-2+i) ...
-        + w_n2(3)*y_validation(k_start-1+i) + w_n2(4)*y_validation(k_start-2+i);
+    y_mod_n2_arx_valid(i) = w_n2(1)*u_validation(k_start-2+i) + w_n2(2)*u_validation(k_start-3+i) ...
+        + w_n2(3)*y_validation(k_start-2+i) + w_n2(4)*y_validation(k_start-3+i);
 end
 
 % z rekurencją
@@ -105,7 +133,7 @@ y_mod_n2_oe_valid(1) = y_mod_n2_arx_valid(1);
 y_mod_n2_oe_valid(2) = y_mod_n2_arx_valid(2);
 
 for i = 3:length_k
-    y_mod_n2_oe_valid(i) = w_n2(1)*u_validation(k_start-1+i) + w_n2(2)*u_validation(k_start-2+i) ...
+    y_mod_n2_oe_valid(i) = w_n2(1)*u_validation(k_start-2+i) + w_n2(2)*u_validation(k_start-3+i) ...
         + w_n2(3)*y_mod_n2_oe_valid(i - 1) + w_n2(4)*y_mod_n2_oe_valid(i -2);
 end
 
@@ -125,9 +153,9 @@ w_n3 = M_n3\y_training(k_start:end);
 % bez rekurencji
 y_mod_n3_arx_train = zeros(length_k, 1);
 for i = 1:length_k
-    y_mod_n3_arx_train(i) = w_n3(1)*u_training(k_start-1+i) + w_n3(2)*u_training(k_start-2+i) ...
-        + w_n3(3)*u_training(k_start-3+i) + w_n3(4)*y_training(k_start-1+i) + w_n3(5)*y_training(k_start-2+i) ...
-        + w_n3(6)*y_training(k_start-3+i);
+    y_mod_n3_arx_train(i) = w_n3(1)*u_training(k_start-2+i) + w_n3(2)*u_training(k_start-3+i) ...
+        + w_n3(3)*u_training(k_start-4+i) + w_n3(4)*y_training(k_start-2+i) + w_n3(5)*y_training(k_start-3+i) ...
+        + w_n3(6)*y_training(k_start-4+i);
 end
 
 % z rekurencją
@@ -136,8 +164,8 @@ y_mod_n3_oe_train(1) = y_mod_n3_arx_train(1);
 y_mod_n3_oe_train(2) = y_mod_n3_arx_train(2);
 y_mod_n3_oe_train(3) = y_mod_n3_arx_train(3);
 for i = 4:length_k
-    y_mod_n3_oe_train(i) = w_n3(1)*u_training(k_start-1+i) + w_n3(2)*u_training(k_start-2+i) ...
-        + w_n3(3)*u_training(k_start-3+i) + w_n3(4)*y_mod_n3_oe_train(i - 1) + w_n3(5)*y_mod_n3_oe_train(i - 2)...
+    y_mod_n3_oe_train(i) = w_n3(1)*u_training(k_start-2+i) + w_n3(2)*u_training(k_start-3+i) ...
+        + w_n3(3)*u_training(k_start-4+i) + w_n3(4)*y_mod_n3_oe_train(i - 1) + w_n3(5)*y_mod_n3_oe_train(i - 2)...
         + w_n3(6)*y_mod_n3_oe_train(i - 3);
 end
 
@@ -149,9 +177,9 @@ end
 y_mod_n3_arx_valid = zeros(length_k, 1);
 
 for i = 1:length_k
-    y_mod_n3_arx_valid(i) = w_n3(1)*u_validation(k_start-1+i) + w_n3(2)*u_validation(k_start-2+i) ...
-        + w_n3(3)*u_validation(k_start-3+i) + w_n3(4)*y_validation(k_start-1+i) + w_n3(5)*y_validation(k_start-2+i) ...
-        + w_n3(6)*y_validation(k_start-3+i);
+    y_mod_n3_arx_valid(i) = w_n3(1)*u_validation(k_start-2+i) + w_n3(2)*u_validation(k_start-3+i) ...
+        + w_n3(3)*u_validation(k_start-4+i) + w_n3(4)*y_validation(k_start-2+i) + w_n3(5)*y_validation(k_start-3+i) ...
+        + w_n3(6)*y_validation(k_start-4+i);
 end
 
 % z rekurencją
@@ -161,8 +189,8 @@ y_mod_n3_oe_valid(2) = y_mod_n3_arx_valid(2);
 y_mod_n3_oe_valid(3) = y_mod_n3_arx_valid(3);
 
 for i = 4:length_k
-    y_mod_n3_oe_valid(i) = w_n3(1)*u_validation(k_start-1+i) + w_n3(2)*u_validation(k_start-2+i) ...
-        + w_n3(3)*u_validation(k_start-3+i) + w_n3(4)*y_mod_n3_oe_valid(i - 1) + w_n3(5)*y_mod_n3_oe_valid(i -2) ...
+    y_mod_n3_oe_valid(i) = w_n3(1)*u_validation(k_start-2+i) + w_n3(2)*u_validation(k_start-3+i) ...
+        + w_n3(3)*u_validation(k_start-4+i) + w_n3(4)*y_mod_n3_oe_valid(i - 1) + w_n3(5)*y_mod_n3_oe_valid(i -2) ...
         + w_n3(6)*y_mod_n3_oe_valid(i -3);
 end
 
